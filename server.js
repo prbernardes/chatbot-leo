@@ -21,9 +21,14 @@ app.get('/show-webview', (request, response) => {
   response.sendFile(__dirname + '/views/poliprivac.html');
 });
 
+//End point para exibir a Página do estudo
+app.get('/show-Morfeu', (request, response) => {
+  response.sendFile(__dirname + '/views/morfeu.html');
+});
+
 // end point que será chamado pelo bot para retornar os botões
 
-const createButtons = (displayUrl) => {
+const createButtons = ({block_name}) => {
   return {
   "messages": [
     {
@@ -37,12 +42,18 @@ const createButtons = (displayUrl) => {
                   "type": "web_url",
                   "url": "https://tranquil-television.glitch.me/show-webview",
                   "title": "Confidencialidade",
-                  "messenger_extensions": true
+                  "messenger_extensions": true,
+                  "webview_height_ratio": 'tall'
                 },
                 {
               "type": "show_block",
-              "block_names": ["Teste 2"],
-              "title": "Show Block"
+              "block_names": [block_name],
+              "title": "Preencher"
+                },
+                {
+              "type": "show_block",
+              "block_names": ["Saída"],
+              "title": "Cancelar"
                 }
               ]
             }
@@ -53,8 +64,75 @@ const createButtons = (displayUrl) => {
 };
 
 app.get('/show-buttons', (request, response) => {
+  const {block_name} = request.query;
   const displayUrl = 'https://tranquil-television.glitch.me/show-webview';
-  response.json(createButtons(displayUrl)); 
+  response.json(createButtons({block_name})); 
+});
+
+// endpoint para enviar o usuário de volta para o bloco de entrada da enfermidade que estava preenchendo
+
+
+app.get('/retorna-enfermidade', (request, response) => {
+  const {block_name} = request.query;
+  response.json(RedirecionaBloco({block_name})); 
+});
+
+// Constante para enviar o usuário para um bloco definido por variável de entrada
+
+  const RedirecionaBloco = ({block_name}) => {
+  return {
+  "redirect_to_blocks": [block_name]
+};
+};
+
+//fora de uso
+app.get('/inscricao', (request, response) => {
+  const {estudo} = request.query;
+  const block_name = `Inscricao-${estudo}`
+  response.json(RedirecionaBloco({block_name})); 
+});
+
+// end point chamado pelo bot para retornar o convite ao usuário para participar de estudo específico
+
+const EncontreiEstudo = (displayUrl) => {
+  return {
+  "messages": [
+    {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": "Você autoriza compartilhar seus dados com o centro de pesquisa?",
+          "buttons": [
+                {
+                  "type": "web_url",
+                  "url": displayUrl,
+                  "title": "Informações estudo",
+                  "messenger_extensions": true,
+                  "webview_height_ratio": 'tall'
+                },
+                {
+              "type": "show_block",
+              "block_names": ["BuscarCentros"],
+              "title": "Autorizo"
+                },
+                {
+              "type": "show_block",
+              "block_names": ["Recusa Consentimento"],
+              "title": "Não,obrigado"
+                }
+              ]
+            }
+        }
+      }
+  ]
+};
+};
+
+app.get('/encontrei-estudo', (request, response) => {
+  const {estudo} = request.query;
+  const displayUrl = `https://tranquil-television.glitch.me/show-${estudo}`;
+  response.json(EncontreiEstudo(displayUrl)); 
 });
 
 // listen for requests :)
