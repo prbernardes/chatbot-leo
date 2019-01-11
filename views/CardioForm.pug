@@ -1,0 +1,102 @@
+doctype html
+html
+  head
+    Title Condições cardíacas
+    meta(name="description", content="A cool thing made with Glitch")
+    link(id="favicon", rel="icon", href="https://glitch.com/edit/favicon-app.ico", type="image/x-icon")
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    
+    style
+      include style.css
+      
+      
+    body
+      script.
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+      
+      
+      main
+      
+      h3 Condições Cardíacas
+      
+      form(id="ProcCardiaco")
+        fieldset
+          legend Procedimentos cardíacos?
+          p Selecione todas que se aplicam
+          p
+            input(type="checkbox", id="Infarto", name="Infarto", value="Infarto")
+            label(for="Infarto") Infarto
+          
+          p
+            input(type="checkbox", id="AVC", name="AVC", value="AVC")
+            label(for="AVC") AVC
+          
+          p
+            input(type="checkbox", id="Cateterismo", name="Cateterismo", value="Cateterismo")
+            label(for="Cateterismo") Cateterismo
+          
+          p
+            input(type="checkbox", id="Revascularizacao", name="Revascularizacao", value="Revascularização")
+            label(for="Revascularizacao") Revascularização cardíaca
+          
+          p
+            input(type="checkbox", id="Angioplastia", name="Angioplastia", value="Angioplastia")
+            label(for="Angioplastia") Angioplastia
+          
+          p
+            input(type="checkbox", id="Aterosclerose", name="Aterosclerose", value="Aterosclerose")
+            label(for="Aterosclerose") Aterosclerose
+          
+          p
+            input(type="checkbox", id="NenhumaCardio", name="NenhumaCardio", value="Nenhuma das opções")
+            label(for="NenhumaCardio") Nenhuma das Opções
+            
+          p
+            input(type="hidden", name="userId", value=userId)
+            input(type="hidden", name="blockName", value=blockName)
+        p
+          button(type="submit") Responder
+      
+      
+      script(src="https://code.jquery.com/jquery-2.2.1.min.js",
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=",
+            crossorigin="anonymous")
+              
+      script.
+        // This function is called when the extensions are loaded and ready
+        window.extAsyncInit = function() {
+            console.log('MessengerExtensions are ready');
+
+            // Handle button click
+            $('#ProcCardiaco').submit(function(event) {
+                console.log('Pressionado submit button');
+                event.preventDefault();
+
+                // Get the form data to send to our endpoint
+                const formData = $('#ProcCardiaco').serialize();
+                console.log(formData);
+                // Post to our server endpoint to broadcast back to the user
+                $.post('/broadcast-to-chatfuel', formData, (data) => {
+                    MessengerExtensions.requestCloseBrowser(function success() {
+                        // webview closed
+                        console.log('Closed the window!');
+                    }, function error(error) {
+                        // an error occurred
+                        console.log('Error closing browser window!');
+                        console.log(error);
+                        $('#infoMessage').text(`requestCloseBrowser error : ${error}`);
+                    });
+                });
+            });
+        };  
+        
+    
+      
