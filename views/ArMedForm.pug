@@ -1,0 +1,135 @@
+doctype html
+html
+  head
+    Title Medicação
+    meta(name="description", content="A cool thing made with Glitch")
+    link(id="favicon", rel="icon", href="https://glitch.com/edit/favicon-app.ico", type="image/x-icon")
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    
+    style
+      include style.css
+      
+      
+    body
+      script.
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+      
+      
+      main
+      
+      h3 Medicação
+      
+      form(id="ArMedicacao")
+
+        h4 Faz uso de quais das seguintes medicações? 
+        p
+          input(type="checkbox", id="Cloroquina", name="Cloroquina", value="Cloroquina")
+          label(for="Cloroquina") Cloroquina
+
+        p
+          input(type="checkbox", id="Hidroxicloroquina", name="Hidroxicloroquina", value="Hidroxicloroquina")
+          label(for="Hidroxicloroquina") Hidroxicloroquina (Reuquinol)
+
+        p
+          input(type="checkbox", id="Sulfassalazina", name="Sulfassalazina", value="Sulfassalazina")
+          label(for="Sulfassalazina") Sulfassalazina
+
+        p
+          input(type="checkbox", id="Leflunomida", name="Leflunomida", value="Leflunomida")
+          label(for="Leflunomida") Leflunomida (Arava)
+
+        p
+          input(type="checkbox", id="NenhumaMed", name="NenhumaMed", value="Nenhuma das opções")
+          label(for="NenhumaMed") Nenhuma das Opções
+        p
+          
+        h4 Faz ou fez uso de quais das seguintes medicações? 
+        p
+          input(type="checkbox", id="Adalimumabe", name="Adalimumabe", value="Adalimumabe")
+          label(for="Adalimumabe") Adalimumabe (Humira)
+
+        p
+          input(type="checkbox", id="Inflimabe", name="Inflimabe", value="Inflimabe")
+          label(for="Inflimabe") Inflimabe (Remicade)
+
+        p
+          input(type="checkbox", id="Etanercepte", name="Etanercepte", value="Etanercepte")
+          label(for="Etanercepte") Etanercepte (Enbrel)
+
+        p
+          input(type="checkbox", id="Golimumabe", name="Golimumabe", value="Golimumabe")
+          label(for="Golimumabe") Golimumabe (Sinponi)
+
+        p
+          input(type="checkbox", id="Certolizumabe", name="Certolizumabe", value="Certolizumabe")
+          label(for="Certolizumabe") Certolizumabe (Cimzia)
+
+        p
+          input(type="checkbox", id="Tocilizumabe", name="Tocilizumabe", value="Tocilizumabe")
+          label(for="Tocilizumabe") Tocilizumabe (Actemra)
+
+        p
+          input(type="checkbox", id="Abatacepte", name="Abatacepte", value="Abatacepte")
+          label(for="Abatacepte") Abatacepte (Orencia)
+
+        p
+          input(type="checkbox", id="Tofacitinibe", name="Tofacitinibe", value="Tofacitinibe")
+          label(for="Tofacitinibe") Tofacitinibe (Xeljanz)
+
+        p
+          input(type="checkbox", id="Baricitinibe", name="Baricitinibe", value="Baricitinibe")
+          label(for="Baricitinibe") Baricitinibe (Olumiant)
+
+        p
+          input(type="checkbox", id="NenhumaMedAnt", name="NenhumaMedAnt", value="Nenhuma das opções")
+          label(for="NenhumaMedAnt") Nenhuma das Opções
+
+        p
+          input(type="hidden", name="userId", value=userId)
+          input(type="hidden", name="blockName", value=blockName)
+        p
+          button(type="submit") Responder
+      
+      
+      script(src="https://code.jquery.com/jquery-2.2.1.min.js",
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=",
+            crossorigin="anonymous")
+              
+      script.
+        // This function is called when the extensions are loaded and ready
+        window.extAsyncInit = function() {
+            console.log('MessengerExtensions are ready');
+
+            // Handle button click
+            $('#ArMedicacao').submit(function(event) {
+                console.log('Pressionado submit button');
+                event.preventDefault();
+
+                // Get the form data to send to our endpoint
+                const formData = $('#ArMedicacao').serialize();
+                console.log(formData);
+                // Post to our server endpoint to broadcast back to the user
+                $.post('/broadcast-to-chatfuel', formData, (data) => {
+                    MessengerExtensions.requestCloseBrowser(function success() {
+                        // webview closed
+                        console.log('Closed the window!');
+                    }, function error(error) {
+                        // an error occurred
+                        console.log('Error closing browser window!');
+                        console.log(error);
+                        $('#infoMessage').text(`requestCloseBrowser error : ${error}`);
+                    });
+                });
+            });
+        };  
+        
+    
+      

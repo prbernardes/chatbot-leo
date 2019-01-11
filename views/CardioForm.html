@@ -1,0 +1,169 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Condições cardíacas</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+      
+      form {
+        /* Just to center the form on the page */
+        margin: 0 auto;
+        width: 350px;
+        /* To see the outline of the form */
+        /*padding: 1em;*/
+        /*border: 1px solid #CCC;*/
+        border-radius: 1em;
+      }
+
+      form div + div {
+        margin-top: 1em;
+      }
+
+      label {
+        /* To make sure that all labels have the same size and are properly aligned */
+        /*display: inline-block;*/
+        width: 50px;
+        text-align: left;
+        font: 1.2em sans-serif
+      }
+
+      legend{
+        font: 1em sans-serif
+      }
+      
+      input, textarea {
+        /* To make sure that all text fields have the same font settings
+           By default, textareas have a monospace font */
+        font: 1em sans-serif;
+
+        /* To give the same size to all text fields */
+        /*width: 300px;*/
+        box-sizing: border-box;
+
+        /* To harmonize the look & feel of text field border */
+        border: 1px solid #999;
+      }
+
+      input:focus, textarea:focus {
+        /* To give a little highlight on active elements */
+        border-color: #000;
+      }
+
+      textarea {
+        /* To properly align multiline text fields with their labels */
+        vertical-align: top;
+
+        /* To give enough room to type some text */
+        height: 5em;
+      }
+
+      .button {
+        /* To position the buttons to the same position of the text fields */
+        padding-left: 90px; /* same size as the label elements */
+      }
+
+      button {
+        /* This extra margin represent roughly the same space as the space
+           between the labels and their text fields */
+        margin-left: .5em;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Code copied from Facebook to load and initialise Messenger extensions
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'Messenger'));
+    </script>
+    <header>
+ 
+    </header>
+
+    <main>
+      <form id="ProcCardiaco">
+        <fieldset>
+          <legend>Já realizou algum procedimento cardíaco?</legend>
+          <p>
+            <input type="checkbox" id="Cateterismo" name="Cateterismo" value="Cateterismo">
+            <label for="Cateterismo">Cateterismo</label>
+          </p>
+          <p>
+            <input type="checkbox" id="Revascularizacao" name="Revascularizacao" value="Revascularização">
+            <label for="Revascularizacao">Revascularização cardíaca</label>
+          </p>
+          <p>
+            <input type="checkbox" id="Angioplastia" name="Angioplastia" value="Angioplastia">
+            <label for="Angioplastia">Angioplastia</label>
+          </p>
+          <p>
+            <input type="checkbox" id="Aterosclerose" name="Aterosclerose" value="Aterosclerose">
+            <label for="Aterosclerose">Aterosclerose</label>
+          </p>
+          <p>
+            <input type="checkbox" id="NenhumaCardio" name="NenhumaCardio" value="Nenhuma das opções">
+            <label for="NenhumaCardio">Nenhuma das Opções</label>
+          </p>
+        </fieldset>
+        
+        
+        <button type="submit">Submit</button>
+      </form>
+      
+      <!-- Your web-app is https, so your scripts need to be too -->
+      <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+              integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+              crossorigin="anonymous"></script>
+      
+      <script>
+      window.extAsyncInit = function() {
+        console.log('Messenger extensions are ready');
+        
+        // Handle button click
+        $('#ProcCardiaco').submit(function(event) {
+          console.log('Submit pressed');
+          
+          event.preventDefault();
+          
+          const formData = $('#ProcCardiaco').serialize();
+          console.log(formData);
+          
+          $.post('/broadcast-to-chatfuel', formData, function (data) {
+            MessengerExtensions.requestCloseBrowser(function () {
+              console.log('Window will be closed');
+            }, function (error) {
+              console.log('There is an error');
+              console.log(error);
+            });
+          });
+        });
+        
+      }
+    </script> 
+      
+    </main>
+
+    <footer>
+      
+    </footer>
+
+  </body>
+</html>
