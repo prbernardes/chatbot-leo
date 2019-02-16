@@ -62,9 +62,14 @@ app.get('/show-Morfeu', (request, response) => {
   response.sendFile(__dirname + '/views/morfeu.html');
 });
 
-//End point para exibir a Página do estudo de insônia
+//End point para exibir a Página do estudo de diabetes
 app.get('/show-Diabetes', (request, response) => {
   response.sendFile(__dirname + '/views/diabetes.html');
+});
+
+//End point para exibir a Página do estudo de artrite reumatoide
+app.get('/show-ArtriteReumatoide', (request, response) => {
+  response.sendFile(__dirname + '/views/ArtriteReumatoide.html');
 });
 
 // end point que será chamado pelo bot para retornar os botões
@@ -77,7 +82,7 @@ const CriarBotaoForm = ({texto},displayUrl) => {
         "type": "template",
         "payload": {
           "template_type": "button",
-          "text": "Por favor, para responder clique no botão abaixo",
+          "text": "Por favor, para responder clique no botão RESPONDER que está logo abaixo",
           "buttons": [
                 {
                   "type": "web_url",
